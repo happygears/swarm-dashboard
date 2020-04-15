@@ -13,9 +13,12 @@ import Components as UI
 localWebsocket : Navigation.Location -> String
 localWebsocket location =
     if location.protocol == "https:" then
-        "wss://" ++ location.host ++ "/stream"
+        -- "wss://" ++ location.host ++ "/stream"
+        "wss://hgshared01.netspyglass.com/stream"
     else
-        "ws://" ++ location.host ++ "/stream"
+        -- "ws://hgshared01.netspyglass.com/stream"
+        "ws://labdcbig2.netspyglass.com:9100/stream"
+        -- "ws://" ++ location.host ++ "/stream"
 
 
 type alias Model =

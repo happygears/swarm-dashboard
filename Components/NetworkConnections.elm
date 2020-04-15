@@ -92,6 +92,8 @@ build services networks =
         networkAttachments =
             attachments services
 
+        -- dummy = Debug.log "networkAttachments" networkAttachments
+
         attached sid nid =
             Maybe.withDefault False (Dict.get ( sid, nid ) networkAttachments)
 

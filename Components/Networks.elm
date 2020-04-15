@@ -40,7 +40,7 @@ networkColor i =
 
 widthStep : Float
 widthStep =
-    16
+    12
 
 
 totalWidth : List a -> Float

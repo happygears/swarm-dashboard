@@ -1,167 +1,193 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Docker Swarm</title>
+    <script type="text/javascript" src="index.js"></script>
+    <script src="node_modules/elm-debug-transformer/dist/elm-console-debug.js"></script>
+    <script>
+      ElmConsoleDebug.register();
+    </script>
+    <style type="text/css">
+      body {
+        background-color: #254356;
+        color: #fff;
+        font-family: Helvetica, Arial, sans-serif;
+        font-weight: lighter;
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <title>Docker Swarm</title>
-  <script type="text/javascript" src="index.js"></script>
-  <style type="text/css">
-    body {
-      background-color: #254356;
-      color: #fff;
-      font-family: Helvetica, Arial, sans-serif;
-      font-weight: lighter;
-    }
+      table {
+        width: 100%;
+        border-spacing: 0;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
 
-    table {
-      width: 100%;
-      border-spacing: 0;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
+      th {
+        padding: 5px 5px;
+        font-weight: lighter;
+        font-size: 12px;
+      }
 
-    th {
-      padding: 5px 7px;
-      font-weight: lighter;
-    }
+      thead th {
+        border-width: 0;
+        border-bottom: 3px solid #547287;
+        cursor: pointer;
+      }
 
-    thead th {
-      border-width: 0;
-      border-bottom: 6px solid #547287;
-    }
+      thead th span {
+        display: block;
+      }
 
-    thead th strong {
-      line-height: 2.0;
-      font-size: 120%;
-      font-weight: normal;
-    }
+      thead th span.role {
+        margin-bottom: 2px;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
 
-    thead th.networks {
-      position: relative;
-      border-bottom-width: 0;
-      padding: 0 4px 0 0;
-    }
+      @media screen and (min-width: 0px) and (max-width: 1024px) {
+        .address {
+          display: none;
+        }
+      }
 
-    thead th.networks svg {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
+      thead th strong {
+        line-height: 2;
+        /* font-size: 120%; */
+        font-weight: normal;
+      }
 
-    thead th.manager {
-      border-bottom: 6px solid rgb(0, 117, 242);
-    }
+      thead th.networks {
+        position: relative;
+        border-bottom-width: 0;
+        padding: 0 4px 0 0;
+        cursor: default;
+      }
 
-    thead th.leader {
-      border-bottom: 6px solid rgb(0, 255, 120);
-    }
+      thead th.networks svg {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
 
-    thead th.down {
-      border-bottom: 6px solid rgb(228, 0, 52);
-    }
+      thead th.manager {
+        border-bottom: 3px solid rgb(0, 117, 242);
+      }
 
-    thead img {
-      height: 50px
-    }
+      thead th.leader {
+        border-bottom: 3px solid rgb(0, 255, 120);
+      }
 
-    thead th:first-child {
-      border-bottom-width: 0;
-      width: 220px;
-    }
+      thead th.down {
+        border-bottom: 3px solid rgb(228, 0, 52);
+      }
 
-    tbody th {
-      background-color: #254356;
-      padding-top: 1.4em;
-      text-align: right;
-      vertical-align: top;
-    }
+      thead img {
+        height: 35px;
+        padding-bottom: 10px;
+      }
 
-    tbody tr:nth-child(2n) {
-      background-color: rgba(84, 114, 135, 0.2);
-    }
+      thead th:first-child {
+        border-bottom-width: 0;
+        width: 150px;
+        cursor: default;
+      }
 
-    td {
-      padding: 3px;
-      vertical-align: top;
-    }
+      tbody th {
+        background-color: #254356;
+        padding-top: 1.4em;
+        text-align: right;
+        vertical-align: top;
+      }
 
-    td.networks {
-      position: relative;
-      padding: 0;
-      border-width: 0;
-      border-right: 2px solid #547287;
-      background-color: #254356;
-      text-align: right;
-      vertical-align: top;
-    }
+      tbody tr:nth-child(2n) {
+        background-color: rgba(84, 114, 135, 0.2);
+      }
 
-    td.networks div {
-       position: absolute;
-       top: 62px;
-       left: 0;
-       bottom: 0;
-    }
+      td {
+        padding: 3px;
+        vertical-align: top;
+      }
 
-    td.networks > svg {
-      position: absolute;
-      left: 0;
-    }
+      td.networks {
+        position: relative;
+        padding: 0;
+        border-width: 0;
+        border-right: 2px solid #547287;
+        background-color: #254356;
+        text-align: right;
+        vertical-align: top;
+      }
 
-    td ul {
-      margin: -3px 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-    }
+      td.networks div {
+        position: absolute;
+        top: 62px;
+        left: 0;
+        bottom: 0;
+      }
 
-    td li {
-      text-align: center;
-      margin: 8px 3px;
-      padding: 6px 7px;
-      list-style: none;
-      border: 2px solid #fff;
-      border-radius: 3px;
-      border-color: rgb(255, 255, 255);
-    }
+      td.networks > svg {
+        position: absolute;
+        left: 0;
+      }
 
-    td svg {
-      display: block;
-    }
+      td ul {
+        margin: -3px 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
 
-    li.desired-ready {
-      border-color: rgb(255, 149, 0);
-    }
+      td li {
+        text-align: center;
+        margin: 8px 3px;
+        padding: 6px 7px;
+        list-style: none;
+        border: 1px solid #fff;
+        border-radius: 3px;
+        border-color: rgb(255, 255, 255);
+        font-size: 12px;
+        overflow: hidden;
+        cursor: pointer;
+      }
 
-    li.desired-running {
-      border-color: rgb(255, 126, 5);
-      background-color: rgba(255, 126, 5, 0.6);
-    }
+      td svg {
+        display: block;
+      }
 
-    li.running {
-      border-color: rgb(0, 255, 120);
-      background-color: rgba(0, 255, 120, 0.6);
-    }
+      li.desired-ready {
+        border-color: rgb(255, 149, 0);
+      }
 
-    li.running-old {
-      border-color: rgb(0, 117, 242);
-      background-color: rgba(0, 117, 242, 0.6);
-    }
+      li.desired-running {
+        border-color: rgba(255, 126, 5, 0.6);
+        background-color: rgba(255, 126, 5, 0.6);
+      }
 
-    li.desired-shutdown {
-      border-color: rgb(191, 191, 191);
-      background-color: rgba(191, 191, 191, 0.6);
-    }
+      li.running {
+        border-color: rgba(0, 255, 120, 0.6);
+        background-color: rgba(0, 255, 120, 0.6);
+      }
 
-    li.failed {
-      border-color: rgb(228, 0, 52);
-      background-color: rgba(228, 0, 52, 0.6);
-    }
-  </style>
-</head>
+      li.running-old {
+        border-color: rgba(0, 117, 242, 0.6);
+        background-color: rgba(0, 117, 242, 0.6);
+      }
 
-<body>
-</body>
-<script type="text/javascript">
-Elm.Main.fullscreen();
-</script>
+      li.desired-shutdown {
+        border-color: rgba(191, 191, 191, 0.6);
+        background-color: rgba(191, 191, 191, 0.6);
+      }
+
+      li.failed {
+        border-color: rgba(228, 0, 52, 0.6);
+        background-color: rgba(228, 0, 52, 0.6);
+      }
+    </style>
+  </head>
+
+  <body></body>
+  <script type="text/javascript">
+    Elm.Main.fullscreen();
+  </script>
 </html>
