@@ -14,8 +14,10 @@ localWebsocket : Navigation.Location -> String
 localWebsocket location =
     if location.protocol == "https:" then
         "wss://" ++ location.host ++ "/stream"
+        -- "wss://labdcbig.netspyglass.com:9100" ++ location.host ++ "/stream"
     else
         "ws://" ++ location.host ++ "/stream"
+        -- "ws://labdcbig.netspyglass.com:9100" ++ location.host ++ "/stream"
 
 
 type alias Model =

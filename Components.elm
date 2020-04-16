@@ -15,7 +15,8 @@ statusString state desiredState =
         state ++ " → " ++ desiredState
 
 task : Service -> AssignedTask -> Html msg
-task service { status, desiredState, containerSpec, slot } =
+task service { status, desiredState, containerSpec, slot, nodeId } =
+
     let
         classes =
             [ ( status.state, True )
@@ -37,11 +38,13 @@ task service { status, desiredState, containerSpec, slot } =
 
                 Nothing ->
                     ""
-
+        slotId = slotLabel slot
+        nsid = String.slice 0 6 nodeId
+        boxlabel = iff (slotId == "") nsid slotId
 
     in
-        li [ classList classes, title (service.name ++ "." ++ slotLabel slot ++ "\n" ++ statusString status.state desiredState ) ]
-            [ text (slotLabel slot)
+        li [ classList classes, title (service.name ++ "." ++ boxlabel ++ "\n" ++ statusString status.state desiredState ) ]
+            [ text boxlabel
             ]
 
 
