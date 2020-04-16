@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  dashboard:
+    image: happygears/swarm-dashboard
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+      - 8081:8081
+    environment:
+      PORT: 8081
+    restart: on-failure
