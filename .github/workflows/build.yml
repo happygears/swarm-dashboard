@@ -1,0 +1,63 @@
+name: Build User/Admin container docker image
+
+on:
+  push:
+    branches: [ "**" ]
+    tags:
+      - '*'
+
+env:
+  CONTAINER_REGISTRY: ghcr.io
+  ARTIFACT_ID: swarm-dashboard
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Define NSG Version
+        id: nsg_version
+        uses: happygears/gt2v@v4
+
+      - name: Print NSG Version
+        run: |
+          echo "Build version :point_down:" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.nsg_version.outputs.long_version }}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Docker tag
+        id: docker_tag
+        run: echo "::set-output name=tag::$([ ${{ steps.nsg_version.outputs.is_release_branch }} = 'true' ] && echo release || echo ${{ steps.nsg_version.outputs.git_branch_safe }})"
+        shell: bash
+
+      - name: Cache docker layer
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+
+      - name: Log in to GitHub Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.CONTAINER_REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.PACKAGE_WRITE_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push docker image
+        uses: docker/build-push-action@v6
+        with:
+          file: ./Dockerfile
+          context: "{{ defaultContext }}"
+          push: true
+          build-args: |
+            IMAGE_NAME=${{ env.ARTIFACT_ID }}
+            BUILD_VERSION=${{ steps.nsg_version.outputs.long_version  }}
+          tags: |
+            ${{ env.CONTAINER_REGISTRY }}/${{ github.repository_owner }}/${{ env.ARTIFACT_ID }}:git-${{ github.sha }}
+            ${{ env.CONTAINER_REGISTRY }}/${{ github.repository_owner }}/${{ env.ARTIFACT_ID }}:${{ steps.nsg_version.outputs.long_version  }}
+            ${{ env.CONTAINER_REGISTRY }}/${{ github.repository_owner }}/${{ env.ARTIFACT_ID }}:${{ steps.docker_tag.outputs.tag }}
