@@ -7,7 +7,7 @@ WORKDIR /home/node/app
 
 FROM base AS dependencies
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 COPY package.json yarn.lock ./
 RUN yarn install --production
@@ -19,7 +19,7 @@ RUN apt-get update \
   && apt-get install -y --no-install-recommends \
   python
 
-RUN npm install -g elm@0.18.0 --unsafe-perm=true --silent
+RUN npm install -g elm@0.18.0-exp5 --unsafe-perm=true --silent
 
 COPY . .
 
