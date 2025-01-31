@@ -7,7 +7,7 @@ WORKDIR /home/node/app
 
 FROM base AS dependencies
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 COPY package.json yarn.lock ./
 RUN yarn install --production
