@@ -6,7 +6,7 @@
   "dependencies": {
     "elm-debug-transformer": "^1.0.4",
     "express": "^4.15.2",
-    "ramda": "^0.24.1",
+    "ramda": "^0.30.1",
     "ws": "^2.3.1"
   },
   "devDependencies": {
