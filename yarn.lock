@@ -298,10 +298,10 @@ ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
 
-elm-debug-transformer@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/elm-debug-transformer/-/elm-debug-transformer-1.0.4.tgz#fe5f9918bda808d01919a44403bfa98b60e3127c"
-  integrity sha512-Vhr7if7RggkVsHeJPtDu0TzY1nk+uXOJsWY3Tp9IKN0mviFbXS0vsiVHLEJwXmS/B7I6sCjKVulqe2Gne06rAg==
+elm-debug-transformer@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/elm-debug-transformer/-/elm-debug-transformer-1.2.1.tgz#f28b97db6a6602aa82cb3ee2adc06c25d1a5d94a"
+  integrity sha512-FukiRtQD/9S8AvYJh0L2SM7P0AmuHnSJoru1wPIDzL/IC5cRaPt5PuHVU6y5DTHG03qbUJCABTpRRpB/0Sj4mg==
 
 encodeurl@~1.0.1:
   version "1.0.1"
